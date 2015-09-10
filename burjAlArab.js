@@ -11,19 +11,19 @@ function main() {
 
 
 function side() {
-   var tykkelse = 0.7 
+   var tykkelse = 0.7
    var sphereSize = 30;
    var sphereDisplacement = [5,-15,0];
    var bigSphere = sphere({r:sphereSize, center: true}).translate(sphereDisplacement);
-   var smallSphere = sphere({r:sphereSize-1, center:true}).translate(sphereDisplacement);   
+   var smallSphere = sphere({r:sphereSize-1, center:true}).translate(sphereDisplacement);
    //smallSphere = bigSphere.scale((sphereSize-1)/sphereSize);
 
    var bue = function(){
-       var plane = cube({size: [100,100,tykkelse]}); 
+       var plane = cube({size: [100,100,tykkelse]});
        var sword = difference(bigSphere, smallSphere);
        return intersection(plane,sword);
    }
-   
+
    var firkantHoejde = 30;
    var sten = [];
    var lodret = cube({size: [firkantHoejde,2,tykkelse]}).setColor([1,0,0]);
@@ -34,13 +34,13 @@ function side() {
     sten.push(side.translate([firkantHoejde*0.45,0,0]));
     sten.push(side.translate([firkantHoejde*0.2,0,0]));
     sten.push(bue());
-    
-   
+
+
     // Siderne er bevidst lavet for lange, så bigsphere sørger
     // for at skære dem pænt.
     return intersection(bigSphere, union(sten));
-   
-   
+
+
 }
 
 
@@ -78,9 +78,9 @@ function side() {
     sten.push(spir);
 
     //sten.push(klods.translate([0,0,0]));
-    sten.push(klods.translate([0,10,0]).setColor(1,0,0));
-    sten.push(klods.translate([0,0,-10]).setColor(0,1,0));
-    sten.push(klods.translate([10,0,0]).setColor(0,0,1));
+    //sten.push(klods.translate([0,10,0]).setColor(1,0,0));
+    //sten.push(klods.translate([0,0,-10]).setColor(0,1,0));
+    //sten.push(klods.translate([10,0,0]).setColor(0,0,1));
 
     var side1 = side().rotateX(90).rotateY(-90).translate([5,5.7,0]).setColor([1,0,0]);
     var side2 = side().rotateX(180).rotateY(-90).translate([5,5,0]);
