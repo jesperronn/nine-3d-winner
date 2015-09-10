@@ -4,7 +4,44 @@
 // description: 3d print af vores udsigt
 // file       : burjalarab.js
 
+
+
+
 function main() {
+
+
+function side() {
+   var sphereSize = 30;
+   var sphereDisplacement = [5,-15,0];
+   var bigSphere = sphere({r:sphereSize, center: true}).translate(sphereDisplacement);
+   var smallSphere = sphere({r:sphereSize-1, center:true}).translate(sphereDisplacement);   
+   //smallSphere = bigSphere.scale((sphereSize-1)/sphereSize);
+
+   var bue = function(){
+       var plane = cube({size: [100,100,1]}); 
+       var sword = difference(bigSphere, smallSphere);
+       return intersection(plane,sword);
+   }
+   
+   var firkantHoejde = 30;
+   var sten = [];
+   var lodret = cube({size: [firkantHoejde,2,1]}).setColor([1,0,0]);
+   var side = cube({size: [1,15,1]});
+
+    sten.push(lodret);
+    sten.push(side.translate([firkantHoejde*0.7,0,0]));
+    sten.push(side.translate([firkantHoejde*0.45,0,0]));
+    sten.push(side.translate([firkantHoejde*0.2,0,0]));
+    sten.push(bue());
+    
+   
+    // Siderne er bevidst lavet for lange, så bigsphere sørger
+    // for at skære dem pænt.
+    return intersection(bigSphere, union(sten));
+   
+   
+}
+
 
 
     var firkantSize = 10;
@@ -43,6 +80,8 @@ function main() {
     sten.push(klods.translate([0,10,0]).setColor(1,0,0));
     sten.push(klods.translate([0,0,-10]).setColor(0,1,0));
     sten.push(klods.translate([10,0,0]).setColor(0,0,1));
+
+    sten.push(side());
 
     return union(sten);
 
