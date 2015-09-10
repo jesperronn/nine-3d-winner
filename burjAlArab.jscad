@@ -2,7 +2,7 @@
 // author     : Jesper & Jesper Lyster & Rønn
 // license    : MIT License
 // description: 3d print af vores udsigt
-// file       : burjalarab.js
+// file       : burjalarab.jscad
 
 
 
@@ -10,84 +10,99 @@
 function main() {
 
 
-function side() {
-   var tykkelse = 0.7
+// Laver en template for hvordan en side ser ud
+function sideTemplate() {
+   var thickness = 0.7 
    var sphereSize = 30;
    var sphereDisplacement = [5,-15,0];
    var bigSphere = sphere({r:sphereSize, center: true}).translate(sphereDisplacement);
-   var smallSphere = sphere({r:sphereSize-1, center:true}).translate(sphereDisplacement);
-   //smallSphere = bigSphere.scale((sphereSize-1)/sphereSize);
+   var smallSphere = sphere({r:sphereSize-1, center:true}).translate(sphereDisplacement);   
 
-   var bue = function(){
-       var plane = cube({size: [100,100,tykkelse]});
+    
+   // buen kommer som en kugleskal intersectet med et plan
+   var circleArc = function(){
+       var plane = cube({size: [100,100,thickness]}); 
        var sword = difference(bigSphere, smallSphere);
        return intersection(plane,sword);
    }
+   
+   var height = 30;
+   var blocks = [];
+   var verticalBeam = cube({size: [height,2,thickness]}).setColor([1,0,0]);
+   var horizontalBeam = cube({size: [1,15,thickness]});
 
-   var firkantHoejde = 30;
-   var sten = [];
-   var lodret = cube({size: [firkantHoejde,2,tykkelse]}).setColor([1,0,0]);
-   var side = cube({size: [1,15,tykkelse]});
-
-    sten.push(lodret);
-    sten.push(side.translate([firkantHoejde*0.7,0,0]));
-    sten.push(side.translate([firkantHoejde*0.45,0,0]));
-    sten.push(side.translate([firkantHoejde*0.2,0,0]));
-    sten.push(bue());
-
-
+    blocks.push(verticalBeam);
+    blocks.push(horizontalBeam.translate([height*0.7,0,0]));
+    blocks.push(horizontalBeam.translate([height*0.45,0,0]));
+    blocks.push(horizontalBeam.translate([height*0.2,0,0]));
+    blocks.push(circleArc());
+   
     // Siderne er bevidst lavet for lange, så bigsphere sørger
     // for at skære dem pænt.
-    return intersection(bigSphere, union(sten));
-
+    return intersection(bigSphere, union(blocks));
 
 }
 
+// Placer de 2 templates i en ret vinkel
+function sides()
+{
+    var blocks = [];
+
+    var side1 = sideTemplate().rotateX(90).rotateY(-90).translate([5,5.7,0]).setColor([1,0,0]);
+    var side2 = sideTemplate().rotateX(180).rotateY(-90).translate([5,5,0]);
+    blocks.push(side1);
+    blocks.push(side2);
+    return union(blocks);
+}
 
 
-    var firkantSize = 10;
-    var spirSize    = .7;
+// Laver hovedbygningen og spiret
+function building()
+{
+    var mainSize = 10;
     //hotelform flytning med centrum i firkant
-    var halv = firkantSize/2;
-    var firkantFlyt = [-halv, -halv, 0];
-    //hotel spir flyttes den anden vej
-    var spirFlyt = [halv,halv,0];
+    var half = mainSize/2;
+    var firkantFlyt = [-half, -half, 0];
 
     // vores standard objekter
-    var firkant = cube({size: [firkantSize,firkantSize,26]})
+    var firkant = cube({size: [mainSize,mainSize,26]})
                     .translate(firkantFlyt);
 
-
     // sejlets z-akse skal have centrum i 10 højde (1/3 oppe)
-    var sejlRadius = 30;
-    var sejlet  = sphere(sejlRadius)
+    var sailRadius = 30;
+    var sail  = sphere(sailRadius)
                     .translate([0,0,10])
                     .setColor([.2,.2,.9,1])
-                    .translate([2/3*sejlRadius,2/3*sejlRadius,0]);
-    var klods   = cube({size: [1,1,1]});
-    var spir    = cube({size:[spirSize, spirSize,40]})
-                    .translate(spirFlyt)
+                    .translate([2/3*sailRadius,2/3*sailRadius,0]);
+    var blocks = [];
+    var HotelShape = intersection(firkant,sail);
+
+    blocks.push(HotelShape);
+    //blocks.push(spire);
+
+    return union(blocks);
+}
+
+// Laver spiret
+function spire()
+{
+    var firkantSize = 10;
+    var spireSize    = .7;
+    //hotelform flytning med centrum i firkant
+    var half = firkantSize/2;
+    //hotel spir flyttes den anden vej
+    var spireMove = [half,half,0];
+    var spire    = cube({size:[spireSize, spireSize,40]})
+                    .translate(spireMove)
                     .setColor(0,1,0);
-                    //.scale(.5);
+                    
+    return spire;                
+}
 
-    var sten = [];
-    var hotelForm = intersection(firkant,sejlet);
-    //sten.push(firkant);
-    //sten.push(sejlet)
-    sten.push(hotelForm);
-    sten.push(spir);
-
-    //sten.push(klods.translate([0,0,0]));
-    //sten.push(klods.translate([0,10,0]).setColor(1,0,0));
-    //sten.push(klods.translate([0,0,-10]).setColor(0,1,0));
-    //sten.push(klods.translate([10,0,0]).setColor(0,0,1));
-
-    var side1 = side().rotateX(90).rotateY(-90).translate([5,5.7,0]).setColor([1,0,0]);
-    var side2 = side().rotateX(180).rotateY(-90).translate([5,5,0]);
-
-    sten.push(side1);
-    sten.push(side2);
-
-    return union(sten);
+    var blocks = [];
+    blocks.push(building());
+    blocks.push(spire());
+    blocks.push(sides());
+    return union(blocks);
 
 }
