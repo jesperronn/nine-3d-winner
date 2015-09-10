@@ -11,6 +11,7 @@ function main() {
 
 
 function side() {
+   var tykkelse = 0.7 
    var sphereSize = 30;
    var sphereDisplacement = [5,-15,0];
    var bigSphere = sphere({r:sphereSize, center: true}).translate(sphereDisplacement);
@@ -18,15 +19,15 @@ function side() {
    //smallSphere = bigSphere.scale((sphereSize-1)/sphereSize);
 
    var bue = function(){
-       var plane = cube({size: [100,100,1]}); 
+       var plane = cube({size: [100,100,tykkelse]}); 
        var sword = difference(bigSphere, smallSphere);
        return intersection(plane,sword);
    }
    
    var firkantHoejde = 30;
    var sten = [];
-   var lodret = cube({size: [firkantHoejde,2,1]}).setColor([1,0,0]);
-   var side = cube({size: [1,15,1]});
+   var lodret = cube({size: [firkantHoejde,2,tykkelse]}).setColor([1,0,0]);
+   var side = cube({size: [1,15,tykkelse]});
 
     sten.push(lodret);
     sten.push(side.translate([firkantHoejde*0.7,0,0]));
@@ -45,12 +46,12 @@ function side() {
 
 
     var firkantSize = 10;
-    var spirSize    = .3;
+    var spirSize    = .7;
     //hotelform flytning med centrum i firkant
     var halv = firkantSize/2;
     var firkantFlyt = [-halv, -halv, 0];
     //hotel spir flyttes den anden vej
-    var spirFlyt = [halv-spirSize,halv-spirSize,0];
+    var spirFlyt = [halv,halv,0];
 
     // vores standard objekter
     var firkant = cube({size: [firkantSize,firkantSize,26]})
@@ -81,7 +82,11 @@ function side() {
     sten.push(klods.translate([0,0,-10]).setColor(0,1,0));
     sten.push(klods.translate([10,0,0]).setColor(0,0,1));
 
-    sten.push(side());
+    var side1 = side().rotateX(90).rotateY(-90).translate([5,5.7,0]).setColor([1,0,0]);
+    var side2 = side().rotateX(180).rotateY(-90).translate([5,5,0]);
+
+    sten.push(side1);
+    sten.push(side2);
 
     return union(sten);
 
