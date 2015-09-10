@@ -1,0 +1,23 @@
+{
+  "name": "nine-3d-winner",
+  "version": "1.0.0",
+  "description": "jesper og jespers Burj Al Arab til 3d print",
+  "main": "index.js",
+  "scripts": {
+    "test": "openjscad burjAlArab.jscad"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jesperronn/nine-3d-winner.git"
+  },
+  "author": "Jesper Lyster, Jesper Rønn-Jensen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jesperronn/nine-3d-winner/issues"
+  },
+  "homepage": "https://github.com/jesperronn/nine-3d-winner#readme",
+  "dependencies": {
+    "jscad": "^1.1.0",
+    "openscad-openjscad-translator": "0.0.7"
+  }
+}
