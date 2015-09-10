@@ -56,7 +56,7 @@ function main() {
     }
 
 
-    // Laver hovedbygningen og spiret
+    // Laver hovedbygningen
     function building()
     {
         var mainSize = 10;
@@ -78,7 +78,6 @@ function main() {
         var HotelShape = intersection(firkant, sail);
 
         blocks.push(HotelShape);
-        // blocks.push(spire);
 
         return union(blocks);
     }
@@ -92,11 +91,10 @@ function main() {
         var half = firkantSize / 2;
         // hotel spir flyttes den anden vej
         var spireMove = [half,half,0];
-        var spire    = cube({ size:[spireSize, spireSize,40] })
-                        .translate(spireMove)
-                        .setColor(0, 1, 0);
+        return cube({ size:[spireSize, spireSize,40] })
+                    .translate(spireMove)
+                    .setColor(0, 1, 0);
 
-        return spire;
     }
 
     var blocks = [];
